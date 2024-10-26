@@ -1,18 +1,23 @@
 "use client";
-import { ActiveTool } from "@/types";
+import { ActiveTool, BuildEditorProps, Editor } from "@/types";
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import TamplateSidebar from "./TamplateSidebar";
 import ShapesSidebar from "./ShapesSidebar";
 import { cn } from "@/lib/utils";
 import { ChevronsLeft } from "lucide-react";
+import FillSidebar from "./FillSidebar";
+import StrokeSidebar from "./StrokeSidebar";
+import StrokeWidthSidebar from "./StrokeWidthSidebar";
+import OpacitySidebar from "./OpacitySidebar";
 
 interface ContainerActiveTabProps {
+  editor: Editor | undefined;
   activeTab: ActiveTool;
   setActiveTab: (tab: ActiveTool) => void;
 }
 
-const ContainerActiveTab = ({ activeTab, setActiveTab }: ContainerActiveTabProps) => {
+const ContainerActiveTab = ({ editor, activeTab, setActiveTab }: ContainerActiveTabProps) => {
   const component = useMemo(() => {
     switch (activeTab) {
       case "templates":
@@ -20,7 +25,7 @@ const ContainerActiveTab = ({ activeTab, setActiveTab }: ContainerActiveTabProps
       case "images":
         return "ini images";
       case "shapes":
-        return <ShapesSidebar />;
+        return <ShapesSidebar editor={editor} />;
       case "text":
         return "ini text";
       case "draw":
@@ -29,6 +34,14 @@ const ContainerActiveTab = ({ activeTab, setActiveTab }: ContainerActiveTabProps
         return "ini ai";
       case "settings":
         return "ini settings";
+      case "fill":
+        return <FillSidebar editor={editor} />;
+      case "stroke-color":
+        return <StrokeSidebar editor={editor} />;
+      case "stroke-width":
+        return <StrokeWidthSidebar editor={editor} />;
+      case "opacity":
+        return <OpacitySidebar editor={editor} />;
       default:
         return null;
     }

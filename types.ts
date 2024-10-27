@@ -190,11 +190,11 @@ export type BuildEditorProps = {
   copy: () => void;
   paste: () => void;
   canvas: fabric.Canvas;
-  fillColor?: string;
-  strokeColor?: string;
-  strokeWidth?: number;
+  fillColor: string;
+  strokeColor: string;
+  strokeWidth: number;
   selectedObjects: fabric.Object[];
-  strokeDashArray?: number[];
+  strokeDashArray: number[];
   fontFamily: string;
   setStrokeDashArray: (value: number[]) => void;
   setFillColor: (value: string) => void;
@@ -219,8 +219,8 @@ export interface Editor {
   // getWorkspace: () => Object | undefined;
   // changeBackground: (value: string) => void;
   // changeSize: (value: { width: number; height: number }) => void;
-  // enableDrawingMode: () => void;
-  // disableDrawingMode: () => void;
+  enableDrawingMode: () => void;
+  disableDrawingMode: () => void;
   onCopy: () => void;
   onPaste: () => void;
   // changeImageFilter: (value: string) => void;

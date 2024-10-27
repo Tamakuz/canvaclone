@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Navbar from './Navbar'
 import { ActiveTool } from '@/types';
 import Sidebar from './Sidebar';
@@ -19,6 +19,16 @@ const Editor = () => {
     defaultWidth: 900,
     defaultHeight: 1200,
   });
+
+  useEffect(() => {
+    if (activeTool === "draw") {
+      editor?.enableDrawingMode();
+    }
+
+    if (activeTool !== "draw") {
+      editor?.disableDrawingMode();
+    }
+  }, [activeTool, editor]);
 
   useEffect(() => {
     if (canvasRef.current) {

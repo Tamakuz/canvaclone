@@ -12,6 +12,7 @@ import StrokeWidthSidebar from "./StrokeWidthSidebar";
 import OpacitySidebar from "./OpacitySidebar";
 import TextSidebar from "./TextSidebar";
 import FontSidebar from "./FontSidebar";
+import DrawSidebar from "./DrawSidebar";
 
 interface ContainerActiveTabProps {
   editor: Editor | undefined;
@@ -31,7 +32,7 @@ const ContainerActiveTab = ({ editor, activeTab, setActiveTab }: ContainerActive
       case "text":
         return <TextSidebar editor={editor} />;
       case "draw":
-        return "ini draw";
+        return <DrawSidebar editor={editor} />;
       case "ai":
         return "ini ai";
       case "settings":

@@ -446,6 +446,16 @@ const buildEditor = ({
 
       return value;
     },
+    enableDrawingMode: () => {
+      canvas.discardActiveObject();
+      canvas.renderAll();
+      canvas.isDrawingMode = true;
+      canvas.freeDrawingBrush!.width = strokeWidth;
+      canvas.freeDrawingBrush!.color = strokeColor;
+    },
+    disableDrawingMode: () => {
+      canvas.isDrawingMode = false;
+    },
   };
 };
 

@@ -16,15 +16,16 @@ import {
 import Link from "next/link";
 import React from "react";
 import HintButton from "./HintButton";
-import { ActiveTool } from "@/types";
+import { ActiveTool, Editor } from "@/types";
 import { cn } from "@/lib/utils";
 
 interface NavbarProps {
   activeTab: ActiveTool;
   setActiveTab: (tab: ActiveTool) => void;
+  editor: Editor | undefined;
 }
 
-const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
+const Navbar = ({ activeTab, setActiveTab, editor }: NavbarProps) => {
   return (
     <nav className="w-full flex items-center p-4 h-[68px] gap-x-8 border-b">
       <Link href="/">
@@ -75,17 +76,17 @@ const Navbar = ({ activeTab, setActiveTab }: NavbarProps) => {
             // disabled={!editor?.canUndo()}
             variant="ghost"
             size="icon"
-            // onClick={() => editor?.onUndo()}
+            onClick={() => editor?.onUndo()}
           >
             <Undo2 className="size-4" />
           </Button>
         </HintButton>
         <HintButton label="Redo" side="bottom" sideOffset={10}>
           <Button
-            // disabled={!editor?.canUndo()}
+            // disabled={!editor?.canRedo()}
             variant="ghost"
             size="icon"
-            // onClick={() => editor?.onUndo()}
+            onClick={() => editor?.onRedo()}
           >
             <Redo2 className="size-4" />
           </Button>

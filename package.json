@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "cross-env NODE_ENV=development next dev",
+    "build": "cross-env NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -19,8 +19,10 @@
     "@types/react-color": "^3.0.12",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cross-env": "^7.0.3",
     "fabric": "^5.3.0-browser",
     "framer-motion": "^11.11.9",
+    "hono": "^4.6.7",
     "jsdom": "^24.1.0",
     "konva": "^9.3.15",
     "lucide-react": "^0.453.0",
@@ -34,7 +36,8 @@
     "react-query": "^3.39.3",
     "react-use": "^17.5.1",
     "tailwind-merge": "^2.5.4",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "unsplash-js": "^7.0.19"
   },
   "devDependencies": {
     "@types/fabric": "^5.3.0",

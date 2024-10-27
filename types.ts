@@ -181,11 +181,11 @@ export interface EditorHookProps {
 };
 
 export type BuildEditorProps = {
-  undo?: () => void;
-  redo?: () => void;
+  undo: () => void;
+  redo: () => void;
   save?: (skip?: boolean) => void;
-  canUndo?: () => boolean;
-  canRedo?: () => boolean;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
   autoZoom: () => void;
   copy: () => void;
   paste: () => void;
@@ -209,10 +209,10 @@ export interface Editor {
   // saveSvg: () => void;
   // saveJson: () => void;
   // loadJson: (json: string) => void;
-  // onUndo: () => void;
-  // onRedo: () => void;
-  // canUndo: () => boolean;
-  // canRedo: () => boolean;
+  onUndo: () => void;
+  onRedo: () => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
   autoZoom: () => void;
   zoomIn: () => void;
   zoomOut: () => void;
@@ -224,7 +224,7 @@ export interface Editor {
   onCopy: () => void;
   onPaste: () => void;
   // changeImageFilter: (value: string) => void;
-  // addImage: (value: string) => void;
+  addImage: (value: string) => void;
   delete: () => void;
   changeFontSize: (value: number) => void;
   getActiveFontSize: () => number;

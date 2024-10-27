@@ -14,6 +14,7 @@ import {
   FONT_FAMILY,
   FONT_WEIGHT,
   FONT_SIZE,
+  JSON_KEYS,
 } from "@/types";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { fabric } from "fabric";
@@ -21,8 +22,14 @@ import { isTextType } from "../utils";
 import { useAutoResize } from "./useAutoResize";
 import { useCanvasEvent } from "./useCanvasEvent";
 import { useClipboard } from "./useClipboard";
+import { useHistory } from "./useHistory";
+import { useLoadState } from "./useLoadState";
 
 const buildEditor = ({
+  undo,
+  canUndo,
+  redo,
+  canRedo,
   fontFamily,
   setFontFamily,
   copy,
@@ -456,6 +463,26 @@ const buildEditor = ({
     disableDrawingMode: () => {
       canvas.isDrawingMode = false;
     },
+    addImage: (value: string) => {
+      fabric.Image.fromURL(
+        value,
+        (image) => {
+          const workspace = getWorkspace();
+
+          image.scaleToWidth(workspace?.width || 0);
+          image.scaleToHeight(workspace?.height || 0);
+
+          addToCanvas(image);
+        },
+        {
+          crossOrigin: "anonymous",
+        },
+      );
+    },
+    onUndo: () => undo(),
+    onRedo: () => redo(),
+    canUndo,
+    canRedo,
   };
 };
 
@@ -481,15 +508,23 @@ const useEditor = ({
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
 
+  const { undo, redo, canUndo, canRedo, setHistoryIndex, canvasHistory } = useHistory({ canvas });
+
   const { copy, paste } = useClipboard({ canvas });
 
   const { autoZoom } = useAutoResize({ canvas, container });
 
   useCanvasEvent({ canvas, setSelectedObjects, clearSelectionCallback });
 
+  useLoadState({ canvas, autoZoom, initialState, canvasHistory, setHistoryIndex });
+
   const editor = useMemo(() => {
-    if(canvas) {
+    if (canvas) {
       return buildEditor({
+        undo,
+        canUndo,
+        redo,
+        canRedo,
         copy,
         paste,
         canvas,
@@ -508,7 +543,7 @@ const useEditor = ({
       });
     }
     return undefined;
-  }, [canvas, container, selectedObjects, fillColor, strokeColor, strokeWidth, strokeDashArray, copy, paste]);
+  }, [canvas, container, selectedObjects, fillColor, strokeColor, strokeWidth, strokeDashArray, copy, paste, undo, redo, canUndo, canRedo]);
 
   const initializeCanvas = useCallback(
     ({
@@ -550,8 +585,18 @@ const useEditor = ({
 
       setCanvas(initialCanvas);
       setContainer(initialContainer);
+
+      const currentState = JSON.stringify(
+        initialCanvas.toJSON(JSON_KEYS)
+      );
+
+      canvasHistory.current = [currentState];
+      setHistoryIndex(0);
     },
-    []
+    [
+      canvasHistory,
+      setHistoryIndex,
+    ]
   );
 
   return { initializeCanvas, editor };

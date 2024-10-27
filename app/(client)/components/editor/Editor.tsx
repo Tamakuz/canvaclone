@@ -50,7 +50,7 @@ const Editor = () => {
 
   return (
     <div>
-      <Navbar activeTab={activeTool} setActiveTab={setActiveTool} />
+      <Navbar activeTab={activeTool} setActiveTab={setActiveTool} editor={editor} />
       <div className="h-[calc(100%-68px)] flex">
         <Sidebar activeTab={activeTool} setActiveTab={setActiveTool} />
         <ContainerActiveTab activeTab={activeTool} setActiveTab={setActiveTool} editor={editor} />

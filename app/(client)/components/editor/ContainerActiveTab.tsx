@@ -13,6 +13,7 @@ import OpacitySidebar from "./OpacitySidebar";
 import TextSidebar from "./TextSidebar";
 import FontSidebar from "./FontSidebar";
 import DrawSidebar from "./DrawSidebar";
+import ImageSidebar from "./ImageSidebar";
 
 interface ContainerActiveTabProps {
   editor: Editor | undefined;
@@ -26,7 +27,7 @@ const ContainerActiveTab = ({ editor, activeTab, setActiveTab }: ContainerActive
       case "templates":
         return <TamplateSidebar />;
       case "images":
-        return "ini images";
+        return <ImageSidebar editor={editor} />;
       case "shapes":
         return <ShapesSidebar editor={editor} />;
       case "text":

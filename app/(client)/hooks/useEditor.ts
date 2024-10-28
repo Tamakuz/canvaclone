@@ -24,7 +24,6 @@ import { useCanvasEvent } from "./useCanvasEvent";
 import { useClipboard } from "./useClipboard";
 import { useHistory } from "./useHistory";
 import { useLoadState } from "./useLoadState";
-import 'fabric-history';
 
 const buildEditor = ({
   undo,

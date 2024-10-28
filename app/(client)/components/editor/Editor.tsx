@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Navbar from './Navbar'
 import { ActiveTool } from '@/types';
 import Sidebar from './Sidebar';

@@ -16,14 +16,15 @@ import {
   FONT_SIZE,
   JSON_KEYS,
 } from "@/types";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { fabric } from "fabric";
-import { isTextType } from "../utils";
+import { createFilter, isTextType } from "../utils";
 import { useAutoResize } from "./useAutoResize";
 import { useCanvasEvent } from "./useCanvasEvent";
 import { useClipboard } from "./useClipboard";
 import { useHistory } from "./useHistory";
 import { useLoadState } from "./useLoadState";
+import 'fabric-history';
 
 const buildEditor = ({
   undo,
@@ -483,6 +484,20 @@ const buildEditor = ({
     onRedo: () => redo(),
     canUndo,
     canRedo,
+    changeImageFilter: (value: string) => {
+      const objects = canvas.getActiveObjects();
+      objects.forEach((object) => {
+        if (object.type === "image") {
+          const imageObject = object as fabric.Image;
+
+          const effect = createFilter(value);
+
+          imageObject.filters = effect ? [effect] : [];
+          imageObject.applyFilters();
+          canvas.renderAll();
+        }
+      });
+    },
   };
 };
 
@@ -508,7 +523,13 @@ const useEditor = ({
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
 
-  const { undo, redo, canUndo, canRedo, setHistoryIndex, canvasHistory } = useHistory({ canvas });
+  const {
+    canRedo,
+    canUndo,
+    undo,
+    redo,
+    canvasHistory,
+    setHistoryIndex, } = useHistory({ canvas });
 
   const { copy, paste } = useClipboard({ canvas });
 
@@ -516,7 +537,13 @@ const useEditor = ({
 
   useCanvasEvent({ canvas, setSelectedObjects, clearSelectionCallback });
 
-  useLoadState({ canvas, autoZoom, initialState, canvasHistory, setHistoryIndex });
+  useLoadState({
+    canvas,
+    autoZoom,
+    initialState,
+    canvasHistory,
+    setHistoryIndex,
+  });
 
   const editor = useMemo(() => {
     if (canvas) {
@@ -589,14 +616,10 @@ const useEditor = ({
       const currentState = JSON.stringify(
         initialCanvas.toJSON(JSON_KEYS)
       );
-
       canvasHistory.current = [currentState];
       setHistoryIndex(0);
     },
-    [
-      canvasHistory,
-      setHistoryIndex,
-    ]
+    []
   );
 
   return { initializeCanvas, editor };

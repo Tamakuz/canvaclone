@@ -18,6 +18,11 @@ const ColorPicker = ({ value, onChange }: ColorPickerProps) => {
         onChange={(color) => {
           const formattedValue = rgbaObjectToString(color.rgb);
           setColor(formattedValue);
+          // onChange(formattedValue);
+        }}
+        onChangeComplete={(color) => {
+          const formattedValue = rgbaObjectToString(color.rgb);
+          setColor(formattedValue);
           onChange(formattedValue);
         }}
         styles={{

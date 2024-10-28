@@ -8,20 +8,24 @@ interface UseCanvasEventsProps {
   canvas: fabric.Canvas | null;
   setSelectedObjects: (objects: fabric.Object[]) => void;
   clearSelectionCallback?: () => void;
+  handleUpdateHistory?: (json: any) => void;
 };
 
-export const useCanvasEvent = ({ canvas, setSelectedObjects, clearSelectionCallback }: UseCanvasEventsProps) => {
+export const useCanvasEvent = ({ canvas, setSelectedObjects, clearSelectionCallback, handleUpdateHistory }: UseCanvasEventsProps) => {
   useEffect(() => {
     if(canvas) {
       canvas.on("selection:created", (event) => {
         setSelectedObjects(event.selected || []);
+        // handleUpdateHistory?.(canvas.toJSON());
       });
       canvas.on("selection:updated", (event) => {
         setSelectedObjects(event.selected || []);
+        // handleUpdateHistory?.(canvas.toJSON());
       });
       canvas.on("selection:cleared", () => {
         setSelectedObjects([]);
         clearSelectionCallback?.();
+        // handleUpdateHistory?.(canvas.toJSON());
       });
     }
 

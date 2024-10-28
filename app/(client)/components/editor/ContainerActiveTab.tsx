@@ -14,6 +14,8 @@ import TextSidebar from "./TextSidebar";
 import FontSidebar from "./FontSidebar";
 import DrawSidebar from "./DrawSidebar";
 import ImageSidebar from "./ImageSidebar";
+import FilterSidebard from "./FilterSidebar";
+import AiSidebar from "./AiSidebar";
 
 interface ContainerActiveTabProps {
   editor: Editor | undefined;
@@ -35,7 +37,7 @@ const ContainerActiveTab = ({ editor, activeTab, setActiveTab }: ContainerActive
       case "draw":
         return <DrawSidebar editor={editor} />;
       case "ai":
-        return "ini ai";
+        return <AiSidebar editor={editor} />;
       case "settings":
         return "ini settings";
       case "fill":
@@ -48,6 +50,8 @@ const ContainerActiveTab = ({ editor, activeTab, setActiveTab }: ContainerActive
         return <OpacitySidebar editor={editor} />;
       case "font":
         return <FontSidebar editor={editor} />;
+      case "filter":
+        return <FilterSidebard editor={editor} />;
       default:
         return null;
     }

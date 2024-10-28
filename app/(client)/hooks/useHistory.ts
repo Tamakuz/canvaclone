@@ -1,5 +1,7 @@
 import { fabric } from "fabric";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import { JSON_KEYS } from "@/types";
 
 interface UseHistoryProps {
   canvas: fabric.Canvas | null;
@@ -8,8 +10,38 @@ interface UseHistoryProps {
 export const useHistory = ({ canvas }: UseHistoryProps) => {
   const [historyIndex, setHistoryIndex] = useState(0);
   const canvasHistory = useRef<string[]>([]);
-  const skipSave = useRef(false);
 
+  useEffect(() => {
+    if (!canvas) return;
+
+    const handleHistoryChange = () => {
+      const currentState = JSON.stringify(canvas.toJSON(JSON_KEYS));
+      canvasHistory.current = [...canvasHistory.current, currentState];
+      setHistoryIndex(prev => prev + 1);
+    };
+
+    canvas.on("object:modified", handleHistoryChange);
+    canvas.on("object:added", handleHistoryChange);
+    canvas.on("object:removed", handleHistoryChange);
+
+    return () => {
+      canvas.off("object:modified", handleHistoryChange);
+      canvas.off("object:added", handleHistoryChange); 
+      canvas.off("object:removed", handleHistoryChange);
+    };
+  }, [canvas])
+
+  const parseHistory = useCallback(() => {
+    if (!canvas) return;
+
+    const parsedHistory = canvasHistory.current.map((state) => {
+      return JSON.parse(state);
+    });
+
+    return parsedHistory;
+  }, [canvas]);
+  
+  console.log(parseHistory());
   console.log(historyIndex);
 
   const canUndo = useCallback(() => {
@@ -20,9 +52,8 @@ export const useHistory = ({ canvas }: UseHistoryProps) => {
     return historyIndex < canvasHistory.current.length - 1;
   }, [historyIndex]);
 
-  const undo = useCallback(() => {
+  const undo = () => {
     if (canUndo()) {
-      skipSave.current = true;
       canvas?.clear().renderAll();
 
       const previousIndex = historyIndex - 1;
@@ -33,14 +64,12 @@ export const useHistory = ({ canvas }: UseHistoryProps) => {
       canvas?.loadFromJSON(previousState, () => {
         canvas.renderAll();
         setHistoryIndex(previousIndex);
-        skipSave.current = false;
       });
     }
-  }, [canUndo, canvas, historyIndex]);
+  }
 
   const redo = useCallback(() => {
     if (canRedo()) {
-      skipSave.current = true;
       canvas?.clear().renderAll();
 
       const nextIndex = historyIndex + 1;
@@ -51,18 +80,16 @@ export const useHistory = ({ canvas }: UseHistoryProps) => {
       canvas?.loadFromJSON(nextState, () => {
         canvas.renderAll();
         setHistoryIndex(nextIndex);
-        skipSave.current = false;
       });
     }
   }, [canvas, historyIndex, canRedo]);
 
   return {
-    undo,
-    redo,
     canUndo,
     canRedo,
+    undo,
+    redo,
     setHistoryIndex,
     canvasHistory,
   };
 };
-

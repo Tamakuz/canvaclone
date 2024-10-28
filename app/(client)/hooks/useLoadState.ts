@@ -1,6 +1,7 @@
-import { JSON_KEYS } from "@/types";
 import { fabric } from "fabric";
 import { useEffect, useRef } from "react";
+
+import { JSON_KEYS } from "@/types";
 
 interface UseLoadStateProps {
   autoZoom: () => void;
@@ -38,8 +39,5 @@ export const useLoadState = ({
     [
       canvas,
       autoZoom,
-      initialState, // no need, this is a ref
-      canvasHistory, // no need, this is a ref
-      setHistoryIndex, // no need, this is a dispatch
     ]);
 };

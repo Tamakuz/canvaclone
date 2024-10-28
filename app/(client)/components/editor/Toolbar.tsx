@@ -80,7 +80,8 @@ const Toolbar = ({ editor, activeTool, onChangeActiveTool }: ToolbarProps) => {
       return;
     }
 
-    const newValue = properties?.fontWeight && properties.fontWeight > 500 ? 500 : 700;
+    const newValue =
+      properties?.fontWeight && properties.fontWeight > 500 ? 500 : 700;
 
     editor?.changeFontWeight(newValue);
     setProperties((current) => ({
@@ -102,7 +103,7 @@ const Toolbar = ({ editor, activeTool, onChangeActiveTool }: ToolbarProps) => {
       ...current,
       fontStyle: newValue,
     }));
-  }
+  };
 
   const handleToggleLinethrough = () => {
     if (!selectedObject) {
@@ -343,6 +344,20 @@ const Toolbar = ({ editor, activeTool, onChangeActiveTool }: ToolbarProps) => {
             />
           </div>
         </>
+      )}
+      {isImage && (
+        <div className="flex items-center h-full justify-center">
+          <HintButton label="Filters" side="bottom" sideOffset={5}>
+            <Button
+              onClick={() => onChangeActiveTool("filter")}
+              size="icon"
+              variant="ghost"
+              className={cn(activeTool === "filter" && "bg-gray-100")}
+            >
+              <TbColorFilter className="size-4" />
+            </Button>
+          </HintButton>
+        </div>
       )}
       <div className="flex items-center h-full justify-center">
         <HintButton label="Bring forward" side="bottom" sideOffset={5}>

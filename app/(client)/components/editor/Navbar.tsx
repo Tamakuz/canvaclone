@@ -73,20 +73,20 @@ const Navbar = ({ activeTab, setActiveTab, editor }: NavbarProps) => {
         </HintButton>
         <HintButton label="Undo" side="bottom" sideOffset={10}>
           <Button
-            // disabled={!editor?.canUndo()}
+            disabled={true}
             variant="ghost"
             size="icon"
-            onClick={() => editor?.onUndo()}
+            // onClick={() => editor?.onUndo()}
           >
             <Undo2 className="size-4" />
           </Button>
         </HintButton>
         <HintButton label="Redo" side="bottom" sideOffset={10}>
           <Button
-            // disabled={!editor?.canRedo()}
+            disabled={true}
             variant="ghost"
             size="icon"
-            onClick={() => editor?.onRedo()}
+            // onClick={() => editor?.onRedo()}
           >
             <Redo2 className="size-4" />
           </Button>

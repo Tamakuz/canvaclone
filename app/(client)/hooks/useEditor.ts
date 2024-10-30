@@ -16,7 +16,7 @@ import {
   FONT_SIZE,
   JSON_KEYS,
 } from "@/types";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { fabric } from "fabric";
 import { createFilter, isTextType } from "../utils";
 import { useAutoResize } from "./useAutoResize";
@@ -26,10 +26,6 @@ import { useHistory } from "./useHistory";
 import { useLoadState } from "./useLoadState";
 
 const buildEditor = ({
-  undo,
-  canUndo,
-  redo,
-  canRedo,
   fontFamily,
   setFontFamily,
   copy,
@@ -479,10 +475,6 @@ const buildEditor = ({
         },
       );
     },
-    onUndo: () => undo(),
-    onRedo: () => redo(),
-    canUndo,
-    canRedo,
     changeImageFilter: (value: string) => {
       const objects = canvas.getActiveObjects();
       objects.forEach((object) => {
@@ -495,6 +487,26 @@ const buildEditor = ({
           imageObject.applyFilters();
           canvas.renderAll();
         }
+      });
+    },
+    getWorkspace,
+    changeSize: (value: { width: number; height: number }) => {
+      const workspace = getWorkspace();
+
+      workspace?.set(value);
+      autoZoom();
+      // save();
+    },
+    changeBackground: (value: string) => {
+      const workspace = getWorkspace();
+      workspace?.set({ fill: value });
+      canvas.renderAll();
+      // save();
+    },
+    loadJson: (json: string) => {
+      const data = JSON.parse(json);
+      canvas.loadFromJSON(data, () => {
+        canvas.renderAll();
       });
     },
   };
@@ -522,14 +534,6 @@ const useEditor = ({
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
 
-  const {
-    canRedo,
-    canUndo,
-    undo,
-    redo,
-    canvasHistory,
-    setHistoryIndex, } = useHistory({ canvas });
-
   const { copy, paste } = useClipboard({ canvas });
 
   const { autoZoom } = useAutoResize({ canvas, container });
@@ -540,17 +544,11 @@ const useEditor = ({
     canvas,
     autoZoom,
     initialState,
-    canvasHistory,
-    setHistoryIndex,
   });
 
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
-        undo,
-        canUndo,
-        redo,
-        canRedo,
         copy,
         paste,
         canvas,
@@ -569,7 +567,7 @@ const useEditor = ({
       });
     }
     return undefined;
-  }, [canvas, container, selectedObjects, fillColor, strokeColor, strokeWidth, strokeDashArray, copy, paste, undo, redo, canUndo, canRedo]);
+  }, [canvas, container, selectedObjects, fillColor, strokeColor, strokeWidth, strokeDashArray, copy, paste]);
 
   const initializeCanvas = useCallback(
     ({
@@ -611,12 +609,6 @@ const useEditor = ({
 
       setCanvas(initialCanvas);
       setContainer(initialContainer);
-
-      const currentState = JSON.stringify(
-        initialCanvas.toJSON(JSON_KEYS)
-      );
-      canvasHistory.current = [currentState];
-      setHistoryIndex(0);
     },
     []
   );

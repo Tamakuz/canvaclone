@@ -16,6 +16,8 @@ import DrawSidebar from "./DrawSidebar";
 import ImageSidebar from "./ImageSidebar";
 import FilterSidebard from "./FilterSidebar";
 import AiSidebar from "./AiSidebar";
+import SettingSidebar from "./SettingSidebar";
+import TemplateSidebar from "./TamplateSidebar";
 
 interface ContainerActiveTabProps {
   editor: Editor | undefined;
@@ -27,7 +29,7 @@ const ContainerActiveTab = ({ editor, activeTab, setActiveTab }: ContainerActive
   const component = useMemo(() => {
     switch (activeTab) {
       case "templates":
-        return <TamplateSidebar />;
+        return <TemplateSidebar editor={editor} />;
       case "images":
         return <ImageSidebar editor={editor} />;
       case "shapes":
@@ -39,7 +41,7 @@ const ContainerActiveTab = ({ editor, activeTab, setActiveTab }: ContainerActive
       case "ai":
         return <AiSidebar editor={editor} />;
       case "settings":
-        return "ini settings";
+        return <SettingSidebar editor={editor} />;
       case "fill":
         return <FillSidebar editor={editor} />;
       case "stroke-color":

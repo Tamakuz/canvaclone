@@ -181,11 +181,11 @@ export interface EditorHookProps {
 };
 
 export type BuildEditorProps = {
-  undo: () => void;
-  redo: () => void;
+  // undo: () => void;
+  // redo: () => void;
   save?: (skip?: boolean) => void;
-  canUndo: () => boolean;
-  canRedo: () => boolean;
+  // canUndo: () => boolean;
+  // canRedo: () => boolean;
   autoZoom: () => void;
   copy: () => void;
   paste: () => void;
@@ -208,17 +208,17 @@ export interface Editor {
   // saveJpg: () => void;
   // saveSvg: () => void;
   // saveJson: () => void;
-  // loadJson: (json: string) => void;
-  onUndo: () => void;
-  onRedo: () => void;
-  canUndo: () => boolean;
-  canRedo: () => boolean;
+  loadJson: (json: string) => void;
+  // onUndo: () => void;
+  // onRedo: () => void;
+  // canUndo: () => boolean;
+  // canRedo: () => boolean;
   autoZoom: () => void;
   zoomIn: () => void;
   zoomOut: () => void;
-  // getWorkspace: () => Object | undefined;
-  // changeBackground: (value: string) => void;
-  // changeSize: (value: { width: number; height: number }) => void;
+  getWorkspace: () => fabric.Object | undefined;
+  changeBackground: (value: string) => void;
+  changeSize: (value: { width: number; height: number }) => void;
   enableDrawingMode: () => void;
   disableDrawingMode: () => void;
   onCopy: () => void;

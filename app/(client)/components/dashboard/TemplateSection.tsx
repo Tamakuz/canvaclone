@@ -1,11 +1,4 @@
-import { Editor } from "@/types";
-import ToolSidebarHeader from "./ToolSidebarHeader";
-import { Crown } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-
-interface TemplateSidebarProps {
-  editor: Editor | undefined;
-}
+import TemplateCard from "./TemplateCard";
 
 const templates = [
   {
@@ -66,51 +59,28 @@ const templates = [
   },
 ];
 
-const TemplateSidebar = ({ editor }: TemplateSidebarProps) => {
-
-  const handleOnLoadTemplate = (template: any) => {
-    editor?.loadJson(template);
-  };
-
+const TemplateSection = () => {
   return (
     <div>
-      <ToolSidebarHeader title="Template" description="Modify the template" />
-      <ScrollArea>
-        <div className="p-2">
-          <div className="grid grid-cols-2 gap-2">
-            {templates.map((template) => {
-              return (
-                <button
-                  style={{
-                    aspectRatio: `${template.width}/${template.height}`,
-                  }}
-                  onClick={() => handleOnLoadTemplate(template.json)}
-                  key={template.id}
-                  className="relative w-full group hover:shadow-lg transition bg-white rounded-md overflow-hidden border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <img
-                    src={template.thumbnailUrl || ""}
-                    alt={template.name || "Template"}
-                    className="object-cover w-full h-full"
-                  />
-                  {template.isPro && (
-                    <div className="absolute top-2 right-2 size-8 items-center flex justify-center bg-yellow-500 rounded-full shadow-md">
-                      <Crown className="size-4 text-white" />
-                    </div>
-                  )}
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent p-3">
-                    <p className="text-sm font-medium text-white truncate">
-                      {template.name}
-                    </p>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </ScrollArea>
+      <h3 className="font-semibold text-2xl mb-2">Choose a Template</h3>
+      <p className="text-gray-600 mb-4">
+        Get started quickly with our professionally designed templates
+      </p>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {templates?.map((template) => (
+          <TemplateCard
+            key={template.id}
+            title={template.name}
+            imageSrc={template.thumbnailUrl || ""}
+            // onClick={() => onClick(template)}
+            description={`${template.width} x ${template.height} px`}
+            width={template.width}
+            height={template.height}
+          />
+        ))}
+      </div>
     </div>
   );
-};
+}
 
-export default TemplateSidebar;
+export default TemplateSection

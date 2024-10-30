@@ -15,7 +15,7 @@ const app = new Hono()
       const { prompt } = c.req.valid("json");
 
       const response = await fetch(
-        "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
+        process.env.NEXT_PUBLIC_BLACK_FOREST_ENDPOINT as string,
         {
           headers: { 
             Authorization: `Bearer ${process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY}`,
@@ -24,11 +24,6 @@ const app = new Hono()
           method: "POST",
           body: JSON.stringify({
             inputs: prompt
-            // parameters: {
-            //   negative_prompt: "blurry, hd quality, distorted",
-            //   num_inference_steps: 30,
-            //   guidance_scale: 7.5,
-            // }
           }),
         }
       );

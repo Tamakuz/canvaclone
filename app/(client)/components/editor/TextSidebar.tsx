@@ -3,17 +3,26 @@ import ToolSidebarHeader from "./ToolSidebarHeader";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Editor } from "@/types";
+import { motion } from "framer-motion";
+import { useDelayedVisibility } from '../../hooks/useDelayedVisibility';
 
 interface TextSidebarProps {
   editor: Editor | undefined;
 }
 
 const TextSidebar = ({ editor }: TextSidebarProps) => {
+  const isVisible = useDelayedVisibility(300);
+
   return (
     <>
       <ToolSidebarHeader title="Text" description="Add text to your design" />
       <ScrollArea>
-        <div className="p-4 space-y-4 border-b">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isVisible ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
+          className="p-4 space-y-4 border-b"
+        >
           <Button className="w-full" onClick={() => editor?.addText("Textbox")}>
             Add a textbox
           </Button>
@@ -55,7 +64,7 @@ const TextSidebar = ({ editor }: TextSidebarProps) => {
           >
             Paragraph
           </Button>
-        </div>
+        </motion.div>
       </ScrollArea>
     </>
   );
